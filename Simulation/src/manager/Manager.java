@@ -10,6 +10,8 @@ public class Manager {
 	//Sans argument il s'initialise en fonction de l'heure
 	public static MTRandom MTRand = new MTRandom();
 	
+	//Taille du cercle
+	public static int RAYON = 10;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
