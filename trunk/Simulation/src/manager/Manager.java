@@ -17,28 +17,24 @@ public class Manager {
 		// TODO Auto-generated method stub
 		
 		
-				
-		for (int i =0 ;i< 100;i++)
+				double cpt =0;
+		for (int i =0 ;i< 10000;i++)
 			{
-				double p;
+				double p =0;
 				double d =MTRand.nextDouble();
-				if (d < poisson(4,0)){
-					System.out.println("0");
+				int j=0;
+				while (d > p){
+					
+					p += poisson(4,j);
+					j++;
 				}
-				else if (d < (poisson(4,0)+ poisson(4,1) )){
-					System.out.println("1");
-				}
-				else if (d < (poisson(4,0)+ poisson(4,1)+ poisson(4,2) )){
-					System.out.println("2");
-				}
-				else if (d < (poisson(4,0)+ poisson(4,1)+ poisson(4,2)+ poisson(4,3) )){
-					System.out.println("3");
-				}
-				else System.out.println("+++");
-			
-			
+				
+				System.out.println("nb :"+(j-1));
+				if(j-1 == 4)cpt++;
 			}
-	}
+		System.out.println(poisson(4,4));
+		System.out.println(""+cpt/10000);
+	}	
 
 	public static double poisson(double lambda,int k) 
 	{
