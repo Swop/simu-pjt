@@ -20,17 +20,7 @@ public class Manager {
 				double cpt =0;
 		for (int i =0 ;i< 10000;i++)
 			{
-				double p =0;
-				double d =MTRand.nextDouble();
-				int j=0;
-				while (d > p){
-					
-					p += poisson(4,j);
-					j++;
-				}
-				
-				System.out.println("nb :"+(j-1));
-				if(j-1 == 4)cpt++;
+				System.out.println(superPoisson());
 			}
 		System.out.println(poisson(4,4));
 		System.out.println(""+cpt/10000);
@@ -43,6 +33,19 @@ public class Manager {
 	   // int k = MTRand.nextInt(12);
 	    return Math.exp (-lambda)* Math.pow(lambda, k) / fact(k);
 	}
+	
+	public static double superPoisson(){
+		double p =0;
+		double d =MTRand.nextDouble();
+		int j=0;
+		while (d > p){
+			
+			p += poisson(4,j);
+			j++;
+		}
+		return j-1;
+	}
+	
 	
 	 static int fact(int n) {
 			
