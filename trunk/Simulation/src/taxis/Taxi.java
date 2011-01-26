@@ -2,6 +2,7 @@ package taxis;
 
 public class Taxi {
 	
+	//Position actuelle
 	private double x;
 	private double y;
 	

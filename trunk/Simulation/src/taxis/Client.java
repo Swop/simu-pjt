@@ -12,22 +12,26 @@ public class Client {
 	private double xDest;
 	private double yDest;
 	
+	//Temps attente entre 0,2 et 1h
+	private double tpsAttente;
 	
 	
+	//Crée un client avec une position et une destination aleatoire
 	public Client(){
-		//TODO Verifier que r < rayon du cercle
-		//TODO Verifier que teta compris entre 0 et 2*PI
+		
 		
 		double teta = Manager.MTRand.nextDouble()* 2 * Math.PI;
 		double r = Manager.MTRand.nextDouble() * Manager.RAYON ;
 		this.x = r * Math.cos(teta);
 		this.y = r * Math.sin(teta);
-		
+
 		
 		teta = Manager.MTRand.nextDouble()* 2 * Math.PI;
 		r = Manager.MTRand.nextDouble() * Manager.RAYON;	
 		this.xDest = r * Math.cos(teta);
 		this.yDest = r * Math.sin(teta);
+		
+		this.tpsAttente = 0.8 * Manager.MTRand.nextDouble() +  0.2;
 		
 	}
 
