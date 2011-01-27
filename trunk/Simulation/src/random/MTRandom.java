@@ -85,7 +85,7 @@ public class MTRandom extends Random {
 
 	/**
 	 * Auto-generated serial version UID.  Note that MTRandom does NOT
-	 * support serialisation of its internal state and it may even be
+	 * support serialization of its internal state and it may even be
 	 * necessary to implement read/write methods to re-seed it properly.
 	 * This is only here to make Eclipse shut up about it being missing.
 	 */

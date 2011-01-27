@@ -62,6 +62,7 @@ public class Taxi {
 		if(this.clientDansTaxi.size() == 0){
 		}
 	}
+	
 	public boolean isFull(){		
 		if (this.clientDansTaxi.size() >= 2) return true;
 		else return false;
