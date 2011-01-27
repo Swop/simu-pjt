@@ -10,8 +10,27 @@ public class Manager {
 	//Sans argument il s'initialise en fonction de l'heure
 	public static MTRandom MTRand = new MTRandom();
 	
-	//Taille du cercle
-	public static int RAYON = 10;
+	/**
+	 * Taille du cercle
+	 * Correspond à 10 000 mètres
+	 */
+	public static int RAYON = 10000;
+	
+	/**
+	 * Le temps commence à 0;
+	 * Un pas de temps correspond à 1 min
+	 */
+	public static int TPS = 0;
+	
+	/**
+	 * Vitesse du taxi en ville 50km/h
+	 * en metre par minute : 50 000/60 m/min =  833,33
+	 */
+	public static double VITESSE = 833.333;
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

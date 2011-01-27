@@ -1,5 +1,7 @@
 package taxis;
 
+import java.util.ArrayList;
+
 public class Comportement {
 	
 	
@@ -12,6 +14,11 @@ public class Comportement {
 	 * Lambda = 4*1h = 4
 	 * 
 	 */
+	
+	/**
+	 * Les clients sur la map
+	 */
+	private ArrayList<Client> clients;
 	
 	private int lambda;
 	
