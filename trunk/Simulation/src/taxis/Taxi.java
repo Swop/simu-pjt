@@ -25,7 +25,11 @@ public class Taxi {
 	}
 	
 	public void prendreClient(Client c){
-		if(this.clientDansTaxi.size() =
+		if(this.clientDansTaxi.size() == 0){
+		}
+	}
+	public boolean isLibre(){		
+		return true;
 	}
 
 }

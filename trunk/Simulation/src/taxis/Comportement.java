@@ -19,13 +19,29 @@ public class Comportement {
 	 * Les clients sur la map
 	 */
 	private ArrayList<Client> clients;
+	private ArrayList<Taxi> taxis;
 	
 	private int lambda;
 	
 	public Comportement(int lambda){
 		this.lambda = lambda;
 		
+		this.clients = new ArrayList<Client>();
+		this.taxis = new ArrayList<Taxi>();
+		
 		
 	}
 
+	/**
+	 * Algo du comportement
+	 * 
+	 * Tant que condition de fin de prog faire
+	 * 		Parcours de la liste des clients
+	 * 			si un client est un attente et tps attente n'est pas atteind
+	 * 				parcours de la liste des taxis pour lui trouver un taxi
+	 * 			sinon si temps attente max atteind, on vire le client;
+	 * 			sinon tempsattente++;
+	 * 		
+	 * 			
+	 */
 }
