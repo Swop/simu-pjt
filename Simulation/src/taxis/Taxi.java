@@ -65,6 +65,17 @@ public class Taxi {
 					y = mainClient.getY();
 					status = TaxiStatus.wayToClientDestination;
 					mainClient.setStatus(ClientStatus.inTheTaxi);
+					clientDansTaxi.add(mainClient);
+					// recalcul du mainClient en fonction de la distance la plus proche
+					for(Client c : clientDansTaxi) {
+						double distance = Math.sqrt(c.getXDest()*c.getXDest()
+												+c.getYDest()*c.getYDest());
+						double mainDistance = Math.sqrt(mainClient.getXDest()*mainClient.getXDest()
+													+mainClient.getYDest()*mainClient.getYDest());
+						if(distance < mainDistance) {
+							mainClient = c;
+						}
+					}
 				} else {
 					x += newX;
 					y += newY;
@@ -87,9 +98,26 @@ public class Taxi {
 					x = mainClient.getXDest();
 					y = mainClient.getYDest();
 					status = TaxiStatus.waiting;
-					// TODO : il faut supprimer le client
+					// il faut supprimer le client
+					// TODO : signaler au modele que le client a disparu ??
+					clientDansTaxi.remove(mainClient);
+					// recalcul du mainClient en fonction de la distance la plus proche
+					mainClient = null;
+					for(Client c : clientDansTaxi) {
+						if(mainClient == null) {
+							mainClient = c;
+						} else {
+							double distance = Math.sqrt(c.getXDest()*c.getXDest()
+									+c.getYDest()*c.getYDest());
+							double mainDistance = Math.sqrt(mainClient.getXDest()*mainClient.getXDest()
+									+mainClient.getYDest()*mainClient.getYDest());
+							if(distance < mainDistance) {
+								mainClient = c;
+							}
+						}
+					}
 					
-					// on retourne 1 pour dire que le client est bien arriver
+					// on retourne 1 pour dire que le client est bien arrive
 					return 1;
 				} else {
 					x += newX;
