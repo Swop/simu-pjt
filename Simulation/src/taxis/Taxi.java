@@ -2,6 +2,8 @@ package taxis;
 
 import java.util.ArrayList;
 
+import manager.Model;
+
 public class Taxi {
 	
 	//Position actuelle
@@ -37,25 +39,65 @@ public class Taxi {
 	}
 	/**
 	 * Bouge dans la direction du main client
+	 * @return
+	 * 0 si le client est arrive 1 sinon
 	 */
-	public void move(){
-		if (this.mainClient != null){			
+	public int move(){
+		if (this.mainClient == null) {
 		}
 		else{
 			if (this.status == TaxiStatus.wayToClient){
 				/**
-				 * TODO
 				 * on bouge dans la direction mainClient.position
 				 */
+				
+				// calcul de l'angle separant le taxi du client (radian)
+				double angle = Math.atan2((mainClient.getY() - y), mainClient.getX() - x);
+				// on calcule alors le x parcouru et le y parcouru
+				int newX = (int)(Model.getParams().getVitesse()*Math.cos(angle));
+				int newY = (int)(Model.getParams().getVitesse()*Math.sin(angle));
+				
+				// on regarde si on a atteint le client
+				if((x < mainClient.getX() && x+newX >= mainClient.getX())
+					|| (x > mainClient.getX() && x+newX <= mainClient.getX())) {
+					// client atteint on met a jour
+					x = mainClient.getX();
+					y = mainClient.getY();
+					status = TaxiStatus.wayToClientDestination;
+					mainClient.setStatus(ClientStatus.inTheTaxi);
+				} else {
+					x += newX;
+					y += newY;
+				}
 			}
 			else if(this.status == TaxiStatus.wayToClientDestination){
 				/**
-				 * TODO
 				 * on bouge dans la direction de mainClient.Destination
 				 */
+				// calcul de l'angle separant le taxi de sa destination (radian)
+				double angle = Math.atan2((mainClient.getYDest() - y), mainClient.getXDest() - x);
+				// on calcule alors le x parcouru et le y parcouru
+				int newX = (int)(Model.getParams().getVitesse()*Math.cos(angle));
+				int newY = (int)(Model.getParams().getVitesse()*Math.sin(angle));
+				
+				// on regarde si on a atteint la destination client
+				if((x < mainClient.getXDest() && x+newX >= mainClient.getXDest())
+					|| (x > mainClient.getXDest() && x+newX <= mainClient.getXDest())) {
+					// destination du client atteinte on met a jour
+					x = mainClient.getXDest();
+					y = mainClient.getYDest();
+					status = TaxiStatus.waiting;
+					// TODO : il faut supprimer le client
+					
+					// on retourne 1 pour dire que le client est bien arriver
+					return 1;
+				} else {
+					x += newX;
+					y += newY;
+				}
 			}
-			
 		}
+		return 0;
 	}
 	
 	public void prendreClient(Client c){

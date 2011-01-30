@@ -131,11 +131,7 @@ public class Simulation extends Thread {
 				clients.add(new Client());
 
 			for(Taxi t : taxis) {
-				t.move();
-				// Il faudra mettre dans move() le fait de prendre un client si ce dernier est en mode "taxiComming" et que le taxi est sur son emplacement
-				// et egalement lacher les clients s'ils sont arrivés.
-				// Il faudrai que move() puisse renvoyer le nombre de client satisfaits de plus (soit qui sont montés dans le taxi, soit qui sont arrivés à bon port, au choix).
-				// --> TODO : nbClientSatisfaits += t.move();
+				nbClientSatisfaits += t.move();
 			}
 
 			for(Client c : clients) {
