@@ -22,7 +22,7 @@ public class Poisson {
 		// int k = MTRand.nextInt(12);
 		return Math.exp(-lambda) * Math.pow(lambda, k) / Utils.fact(k);
 	}
-
+	
 	public static int nombreNouveauxClients(double lambda) {
 		HashMap lst = new HashMap();
 		boolean firstIntersectionPassed = false;
