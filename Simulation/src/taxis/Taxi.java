@@ -1,9 +1,6 @@
 package taxis;
 
 import java.util.ArrayList;
-import java.util.List;
-import manager.Model;
-import simulation.Simulation;
 
 import manager.Model;
 
@@ -12,19 +9,11 @@ public class Taxi {
 	//Position actuelle
 	private double x;
 	private double y;
-
-
-	public static final int PLACE_DANS_TAXI = 2;
-
+	
 	/**
 	 * Liste de tous les clients dans le taxi
 	 */
 	private ArrayList<Client> clientDansTaxi;
-
-	/** Garde une reference vers la liste totale des clients
-	 * pour pouvoir les enlever si un client est depose
-	 */
-	private List<Client> clientsTotaux;
 	
 	/**
 	 * Permet de savoir qui est le chef des clients
@@ -37,7 +26,7 @@ public class Taxi {
 	
 	private TaxiStatus status;
 	
-	public Taxi(List<Client> clientsTotaux){
+	public Taxi(){
 		/**
 		 * Les taxi commence en 0:0, au centre;
 		 */
@@ -45,7 +34,6 @@ public class Taxi {
 		this.y=0;
 		
 		this.clientDansTaxi = new ArrayList<Client>();
-		this.clientsTotaux = clientsTotaux;
 		this.status = TaxiStatus.waiting;
 		
 	}
@@ -57,15 +45,6 @@ public class Taxi {
 	public int move(){
 		if (this.mainClient == null) {
 		}
-
-		if(this.clientDansTaxi.isEmpty() && !this.status.equals(TaxiStatus.wayToClient))
-			this.status = TaxiStatus.waiting;
-		
-
-		//Si le taxi n'a pas de mainCLient c'est qu'il est vide ... On fait rien !
-
-
-		/*
 		else{
 			if (this.status == TaxiStatus.wayToClient){
 				/**
@@ -124,9 +103,7 @@ public class Taxi {
 					y += newY;
 				}
 			}
-		}*/
-		
-		return clientsSatisfaits;
+		}
 		return 0;
 	}
 	
@@ -205,51 +182,9 @@ public class Taxi {
 		if(this.clientDansTaxi.size() == 0){
 		}
 	}
-
-	private double[] getDeplacementUnitaire(double directionX, double directionY) {
-		double[] deplacmentUnitaire = {0, 0};
-
-		// Rectangle global dont la diagonale est le trajet total vers la destination)
-
-		double xTotalVersDest = directionX -  this.x;
-		double yTotalVersDest = directionY -  this.y;
-
-		double ratioTotal = yTotalVersDest / xTotalVersDest;
-
-		// Ramené a une rectangle de diagonal egale a la distance unitaire que peut faire le taxi en fonction de sa vitesse, sur le pas de temps donnee
-
-
-		// Distance = Vitesse (m/min) * 60 * Pas de temps (en heure)
-
-		double distanceTaxi = Model.getParams().getVitesse() * 60 * Simulation.PAS_DE_TEMPS;
-
-
-		/*
-		 * Ratio = yTotal / xTotal
-		 * Le ratio ne change pas en fonction de la taille du rectangle. Donc on se ramene a un rectange
-		 * de diagonal egale a la distance unitaire que peut faire le taxi en fonction de sa vitesse, sur le pas de temps donnee
-		 *
-		 * D'apres Pythagore, on a DistanceTaxi^2 = xUnitaire^2 + yUnitaire^2
-		 * DistanceTaxi^2 = xUnitaire^2 + (Ratio * xUnitaire)^2
-		 * DistanceTaxi^2 = (1 + Ratio)^2 * xUnitaire^2
-		 *
-		 * Donc xUnitaire = sqrt( DistanceTaxi^2 / (1 + Ratio)^2 )
-		 * Soit xUnitaire = DistanceTaxi / (1 + Ratio)
-		 *
-		 * Et on en deduit yUnitaire :
-		 * yUnitaire = Ratio * xUnitaire
-		 */
-		double deplacementElementaireX = distanceTaxi / (1 + ratioTotal);
-		double deplacementElementaireY = ratioTotal * deplacementElementaireX;
-
-		deplacmentUnitaire[0] = deplacementElementaireX;
-		deplacmentUnitaire[1] = deplacementElementaireY;
-
-		return deplacmentUnitaire;
-	}
 	
 	public boolean isFull(){		
-		if (this.clientDansTaxi.size() == Taxi.PLACE_DANS_TAXI) return true;
+		if (this.clientDansTaxi.size() >= 2) return true;
 		else return false;
 	}
 
