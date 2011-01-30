@@ -1,5 +1,6 @@
 package simulation;
 
+import java.util.List;
 import random.MTRandom;
 
 /**
@@ -35,5 +36,20 @@ public class Utils {
 	 */
 	public static double getRandDouble() {
 		return MTRand.nextDouble();
+	}
+
+	/**
+	 * Calcul la moyenne d'une liste de double
+	 * @param lst
+	 * La liste sur laquelle clalculer la moyenne
+	 * @return
+	 * La moyenne de la liste
+	 */
+	static double moyenne(List<Double> lst) {
+		double result = 0;
+		for(Double elem : lst) {
+			result += elem;
+		}
+		return result/(double)lst.size();
 	}
 }

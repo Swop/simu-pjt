@@ -1,3 +1,17 @@
+/**
+ *		*******************************************************************
+ *
+ *		CLASSE A ZAPPER JE PENSE ...
+ *			Y'A DEJA LE DEROULEMENT DE LA SIMULATION DANS LA CLASSE Simulation
+ *
+ *		PAR CONTRE, LES COMPORTEMENTS DANS TAXI (ET CLIENT) PEUVENT ETRE INTERRESSANT A COMPLETER
+ *
+ *
+ *		*******************************************************************
+ *
+ *
+ */
+
 package taxis;
 
 import java.util.ArrayList;
@@ -6,10 +20,10 @@ public class Comportement {
 	
 	
 	/**
-	 * Ici on defini les paramètre de la loi de 
+	 * Ici on defini les paramï¿½tre de la loi de 
 	 * poisson pour connaitre les temps d'aparition
 	 * des clients Ex:
-	 * Unité de temps 1h
+	 * Unitï¿½ de temps 1h
 	 * 4 client par heure :
 	 * Lambda = 4*1h = 4
 	 * 
@@ -38,7 +52,7 @@ public class Comportement {
 	 * Tant que condition de fin de prog faire
 	 * 		On fait apparaitre (ou non les clients)
 	 * 		On fait avancer les taxis qui ont une destination
-	 * 			(on peut ainsi les mettre à "libre" si ils viennet de deposer qqun)
+	 * 			(on peut ainsi les mettre ï¿½ "libre" si ils viennet de deposer qqun)
 	 * 
 	 * 
 	 * 		Parcours de la liste des clients

@@ -1,5 +1,9 @@
 package simulation;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import manager.Model;
 import view.LogView;
 
@@ -8,6 +12,8 @@ import view.LogView;
  */
 public class Poisson {
 
+	public static final double SEUIL_ACCEPTATION = 0.02;
+
 	public static double poisson(double lambda, int k) {
 
 		//Pour un lambda = 4, au dela de 12 on considere la proba nulle
@@ -15,6 +21,40 @@ public class Poisson {
 
 		// int k = MTRand.nextInt(12);
 		return Math.exp(-lambda) * Math.pow(lambda, k) / Utils.fact(k);
+	}
+
+	public static int nombreNouveauxClients(double lambda) {
+		HashMap lst = new HashMap();
+		boolean firstIntersectionPassed = false;
+		double proba = 0;
+
+		int k = 0;
+
+		while(proba >= Poisson.SEUIL_ACCEPTATION || !firstIntersectionPassed) {
+			proba = Poisson.poisson(lambda, k);
+			if(!firstIntersectionPassed && proba >= Poisson.SEUIL_ACCEPTATION)
+				firstIntersectionPassed = true;
+
+			if(firstIntersectionPassed && proba >= Poisson.SEUIL_ACCEPTATION)
+				lst.put(k, proba);
+			k++;
+		}
+
+		double sum = 0;
+
+		for(Integer i : (Set<Integer>)lst.keySet())
+			sum += (Double)lst.get(i);
+
+		double alea = Utils.getRandDouble() * sum;
+
+		sum = 0;
+
+		for(Integer i : (Set<Integer>)lst.keySet()) {
+			if(sum+(Double)lst.get(i) >= alea)
+				return i;
+			sum += (Double)lst.get(i);
+		}
+		return 0;
 	}
 
 	public static double superPoisson() {

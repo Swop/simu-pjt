@@ -47,5 +47,13 @@ public class LogView extends JTextArea {
 	 */
 	private void logMsg(String msg) {
 		this.append(msg);
+		this.scrollDown();
+	}
+
+	/**
+	 * Scroll the pane to the end of log lines
+	 */
+	private void scrollDown() {
+		this.setCaretPosition(this.getDocument().getLength());
 	}
 }

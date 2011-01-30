@@ -3,14 +3,20 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import manager.Model;
+import simulation.Simulation;
 
 /**
  * Fenetre principale du programme
  * @author Sylvain Mauduit <sylvain@mauduit.fr>
  */
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements ActionListener {
 	
 	/**
 	 * Fenetre de log
@@ -24,6 +30,10 @@ public class MainWindow extends JFrame {
 	 * Instance de la fenetre
 	 */
 	private static MainWindow _instance = null;
+	/**
+	 * Boutton pour lancer la simulation
+	 */
+	private JButton runBtn;
 
 	/**
 	 * Constructeur de la fenetre
@@ -50,9 +60,17 @@ public class MainWindow extends JFrame {
 		Container mainPane = this.getContentPane();
 		mainPane.setLayout(new BorderLayout());
 
+		JPanel northPane = new JPanel(new BorderLayout());
+
 		paramsPanel = new ParamsPanel();
 		paramsPanel.init();
-		mainPane.add(paramsPanel, BorderLayout.NORTH);
+		northPane.add(paramsPanel, BorderLayout.NORTH);
+
+		runBtn = new JButton("LANCER LA SIMULATION");
+		runBtn.addActionListener(this);
+		northPane.add(runBtn, BorderLayout.CENTER);
+
+		mainPane.add(northPane, BorderLayout.NORTH);
 
 		logView = LogView.getInstance();
 		JScrollPane scroll = new JScrollPane(logView);
@@ -87,5 +105,37 @@ public class MainWindow extends JFrame {
 	 */
 	public ParamsPanel getParamsPanel() {
 		return paramsPanel;
+	}
+
+	/**
+	 * Desactive le panneau de configuration des parametres et le bouton de lancement avant le calcul
+	 */
+	public void activerCommandes(boolean val) {
+		paramsPanel.setEnabled(val);
+		if(val)
+			runBtn.setText("LANCER LA SIMULATION");
+		else
+			runBtn.setText("STOPPER LA SIMULATION");
+	}
+
+	/**
+	 * S'occupe du traitement du a l'activation du boutton de lancement/d'arret de simulation
+	 * @param e
+	 */
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource().equals(runBtn)) {
+			
+			Simulation simu = Model.getInstance().getSimulation();
+
+			if(simu != null && simu.isRunning()) {
+				simu.stopThread();
+				activerCommandes(true);
+			} else {
+				activerCommandes(false);
+				simu = new Simulation();
+				Model.getInstance().setSimulation(simu);
+				simu.start();
+			}
+		}
 	}
 }
