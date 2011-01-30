@@ -107,6 +107,9 @@ public class Simulation extends Thread {
 		List<Client> clients = new ArrayList<Client>();
 		List<Taxi> taxis = new ArrayList<Taxi>();
 
+		for(int i=0; i< nbTaxis; i++)
+			taxis.add(new Taxi(clients));
+
 
 		for(int i = 0; i<Simulation.NB_PAS*Simulation.PAS_DE_TEMPS; i+=Simulation.PAS_DE_TEMPS) {
 			/**

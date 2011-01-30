@@ -6,6 +6,7 @@ import simulation.Utils;
 public class Client {
 	
 	public static final int MAX_TEMPS_ATTENTE = 2;
+	public static final double RAYON_CERCLE_ENTOURANT_CLIENT = 5;
 
 	//Position Actuelle
 	private double x;
@@ -64,6 +65,10 @@ public class Client {
 
 	public double getTpsAttente() {
 		return tpsAttente;
+	}
+
+	public void setStatus(ClientStatus status) {
+		this.status = status;
 	}
 	
 	public void setStatus(ClientStatus status) {

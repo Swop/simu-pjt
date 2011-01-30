@@ -1,6 +1,5 @@
 package manager;
 
-import simulation.Poisson;
 import view.MainWindow;
 
 public class Manager {
