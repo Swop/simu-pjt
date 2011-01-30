@@ -2,6 +2,8 @@ package taxis;
 
 import java.util.ArrayList;
 
+import simulation.Simulation;
+
 import manager.Model;
 
 public class Taxi {
@@ -14,6 +16,13 @@ public class Taxi {
 	 * Liste de tous les clients dans le taxi
 	 */
 	private ArrayList<Client> clientDansTaxi;
+	
+	/**
+	 * Si le taxi a accepte d'aller chercher
+	 * un client mais qu'il termine de deposer
+	 * un autre client
+	 */
+	private Client clientWait;
 	
 	/**
 	 * Permet de savoir qui est le chef des clients
@@ -36,6 +45,7 @@ public class Taxi {
 		this.clientDansTaxi = new ArrayList<Client>();
 		this.status = TaxiStatus.waiting;
 		
+		clientWait = null;
 	}
 	/**
 	 * Bouge dans la direction du main client
@@ -54,14 +64,15 @@ public class Taxi {
 				// calcul de l'angle separant le taxi du client (radian)
 				double angle = Math.atan2((mainClient.getY() - y), mainClient.getX() - x);
 				// on calcule alors le x parcouru et le y parcouru
-				double newX = Model.getParams().getVitesse()*Math.cos(angle);
-				double newY = Model.getParams().getVitesse()*Math.sin(angle);
+				double vitesseTot = Simulation.NB_PAS/**60*/*Model.getParams().getVitesse();
+				double newX = vitesseTot * Math.cos(angle);
+				double newY = vitesseTot * Math.sin(angle);
 				
 				// on regarde si on a atteint le client
 				if((x < mainClient.getX() && x+newX >= mainClient.getX())
 					|| (x > mainClient.getX() && x+newX <= mainClient.getX())) {
 					// client atteint on met a jour
-					x = mainClient.getX();
+					x = mainClient.getX(); // TODO : en vrai le taxi a pu bouger
 					y = mainClient.getY();
 					status = TaxiStatus.wayToClientDestination;
 					mainClient.setStatus(ClientStatus.inTheTaxi);
@@ -80,21 +91,47 @@ public class Taxi {
 				// calcul de l'angle separant le taxi de sa destination (radian)
 				double angle = Math.atan2((mainClient.getYDest() - y), mainClient.getXDest() - x);
 				// on calcule alors le x parcouru et le y parcouru
-				double newX = Model.getParams().getVitesse()*Math.cos(angle);
-				double newY = Model.getParams().getVitesse()*Math.sin(angle);
+				double vitesseTot = Simulation.NB_PAS/**60*/*Model.getParams().getVitesse();
+				double newX = vitesseTot * Math.cos(angle);
+				double newY = vitesseTot * Math.sin(angle);
 				
 				// on regarde si on a atteint la destination client
 				if((x < mainClient.getXDest() && x+newX >= mainClient.getXDest())
 					|| (x > mainClient.getXDest() && x+newX <= mainClient.getXDest())) {
 					// destination du client atteinte on met a jour
-					x = mainClient.getXDest();
+					x = mainClient.getXDest();  // TODO : en vrai le taxi a pu bouger
 					y = mainClient.getYDest();
-					status = TaxiStatus.waiting;
 					// il faut supprimer le client
-					// TODO : signaler au modele que le client a disparu ??
+					Model.getInstance().getSimulation().destroyClient(mainClient);
 					clientDansTaxi.remove(mainClient);
 					// recalcul du mainClient en fonction de la distance la plus proche
 					mainClient = getPlusProche();
+					if(mainClient != null) {
+						status = TaxiStatus.wayToClientDestination;
+					} else {
+						status = TaxiStatus.waiting;
+					}
+					
+					// on verifie par rapport au client en attente s'il existe
+					if(clientWait != null) {
+						if(mainClient == null) {
+							mainClient = clientWait;
+							clientWait = null;
+							status = TaxiStatus.wayToClient;
+						} else {
+							// on recupere la distance du client en attente
+							double distance = Math.sqrt((clientWait.getX() - x)
+									* (clientWait.getX() - x)
+									+ (clientWait.getY() - y)
+									* (clientWait.getY() - y));
+							// on regarde lequel est le plus proche
+							if(distance <= getDistanceObjectif()) {
+								mainClient = clientWait;
+								clientWait = null;
+								status = TaxiStatus.wayToClient;
+							}
+						}
+					}
 					
 					// on retourne 1 pour dire que le client est bien arrive
 					return 1;
@@ -137,8 +174,12 @@ public class Taxi {
 			// il faut echanger le client que le taxi va chercher
 			// mainClient ne peut etre null a cause de ce status
 			mainClient.setStatus(ClientStatus.waiting);
+			mainClient.setTaxi(null);
 			// le client devient la nouvelle priorite
 			mainClient = c;
+			mainClient.setTaxi(this);
+			// on met a jour le status du client
+			c.setStatus(ClientStatus.taxiComing);
 		} else if(status == TaxiStatus.wayToClientDestination) {
 			// on regarde lequel devient la plus grande priorite
 			double distance = Math.sqrt((c.getX() - x)*(c.getX() - x)
@@ -148,13 +189,40 @@ public class Taxi {
 			if(distance <= mainDistance) {
 				status = TaxiStatus.wayToClient;
 				mainClient = c;
+				mainClient.setTaxi(this);
+				// on met a jour le status du client
+				c.setStatus(ClientStatus.taxiComing);
+			} else {
+				// on verifie qu'on a pas deja un client en attente
+				if(clientWait == null) {
+					clientWait = c;
+					clientWait.setTaxi(this);
+					// on met a jour le status du client
+					c.setStatus(ClientStatus.taxiComing);
+				} else {
+					// on compare les distance
+					double distanceWait = Math.sqrt((clientWait.getX() - x)
+							* (clientWait.getX() - x)
+							+ (clientWait.getY() - y)
+							* (clientWait.getY() - y));
+					if(distance < distanceWait) {
+						// on met a jour le status des clients
+						c.setStatus(ClientStatus.taxiComing);
+						c.setTaxi(this);
+						clientWait.setTaxi(null);
+						clientWait.setStatus(ClientStatus.waiting);
+						// on echange de client
+						clientWait = c;
+					}
+				}
 			}
 		} else { // status est a waiting
 			status = TaxiStatus.wayToClient;
 			mainClient = c;
+			mainClient.setTaxi(this);
+			// on met a jour le status du client
+			c.setStatus(ClientStatus.taxiComing);
 		}
-		// on met a jour le status du client
-		c.setStatus(ClientStatus.taxiComing);
 	}
 	
 	/**
@@ -166,6 +234,52 @@ public class Taxi {
 		return status;
 	}
 	
+	/**
+	 * Methode appelee lorsqu'un client en attente a depasse
+	 * son temps d'attente, pour notifier au taxi
+	 * qu'il n'est plus utile d'aller le chercher
+	 */
+	public void forgetClient(Client c) {
+		if(clientWait != null && clientWait.equals(c)) {
+			clientWait = null;
+		} else if(mainClient == c) {
+			// recalcul du mainClient en fonction de la distance la plus proche
+			mainClient = getPlusProche();
+			if(mainClient != null) {
+				status = TaxiStatus.wayToClientDestination;
+			} else {
+				status = TaxiStatus.waiting;
+			}
+			
+			// on verifie par rapport au client en attente s'il existe
+			if(clientWait != null) {
+				if(mainClient == null) {
+					mainClient = clientWait;
+					clientWait = null;
+					status = TaxiStatus.wayToClient;
+				} else {
+					// on recupere la distance du client en attente
+					double distance = Math.sqrt((clientWait.getX() - x)
+							* (clientWait.getX() - x)
+							+ (clientWait.getY() - y)
+							* (clientWait.getY() - y));
+					// on regarde lequel est le plus proche
+					if(distance <= getDistanceObjectif()) {
+						mainClient = clientWait;
+						clientWait = null;
+						status = TaxiStatus.wayToClient;
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Methode permettant de connaitre la distance entre le taxi
+	 * et sa destination
+	 * @return
+	 * la distance restante
+	 */
 	public double getDistanceObjectif() {
 		if(status == TaxiStatus.wayToClient) {
 			return Math.sqrt((mainClient.getX() - x)*(mainClient.getX() - x)

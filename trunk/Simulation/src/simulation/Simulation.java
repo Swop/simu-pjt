@@ -39,7 +39,19 @@ public class Simulation extends Thread {
 	 * Represente l'etat de la simulation
 	 */
 	private boolean running = false;
+	
+	/**
+	 * Represente la liste des clients de la simulation
+	 */
+	private List<Client> clients = new ArrayList<Client>();
 
+	/**
+	 * Represente la liste des clients qui ont ete supprimer
+	 * pendant le pas d'action (satisfaits ou non), car on ne peut pas
+	 * retirer un element d'une liste pendant qu'elle est parcourue
+	 */
+	private List<Client> clientsAVirer = new ArrayList<Client>();
+	
 	/**
 	 * Constructeur par default de la simulation
 	 */
@@ -98,17 +110,21 @@ public class Simulation extends Thread {
 	 * @param nbTaxis
 	 * Nombre de taxis utilise
 	 * @return
-	 * Satisfaction lcient obtenue
+	 * Satisfaction client obtenue
 	 */
 	private double calculerStaisfactionJournee(int nbTaxis) {
+		clients.clear(); // on reinitialise
 		int nbTotalClients = 0;
 		int nbClientSatisfaits = 0;
 
-		List<Client> clients = new ArrayList<Client>();
 		List<Taxi> taxis = new ArrayList<Taxi>();
-
+		// on ajoute les taxis
+		for(int i = 0; i < nbTaxis; ++i) {
+			taxis.add(new Taxi());
+		}
 
 		for(int i = 0; i<Simulation.NB_PAS*Simulation.PAS_DE_TEMPS; i+=Simulation.PAS_DE_TEMPS) {
+			
 			/**
 	 * Algo du comportement
 	 *
@@ -125,6 +141,9 @@ public class Simulation extends Thread {
 	 * 			sinon tempsattente++;
 	 *
 	 */
+			
+			clientsAVirer.clear(); // reinit les clients a virer
+
 			int nbNouveauxClients = Poisson.nombreNouveauxClients(Model.getParams().getLambdaPoisson());
 			nbTotalClients += nbNouveauxClients;
 
@@ -134,6 +153,13 @@ public class Simulation extends Thread {
 			for(Taxi t : taxis) {
 				nbClientSatisfaits += t.move();
 			}
+			
+			// on retire les clients qui ont ete satisfaits
+			for(Client c : clientsAVirer) {
+				clients.remove(c);
+			}
+			
+			clientsAVirer.clear();
 
 			for(Client c : clients) {
 				
@@ -183,26 +209,47 @@ public class Simulation extends Thread {
 							plusProche.changeClientPrority(c);
 						}
 
-						// Attention, si on place le client en mode "taxiComing", et si le taxi en question
-						// est redirriger autre part, il faut penser a remettre le client en "isWaiting"
-						// pour qu'un autre taxi lui soit envoye la fois d'apres ...
-
-						//TODO : client.tempsAttente += 1;
+						// on incremente le tps d'attente du client en fct du pas
+						c.incrementeTpsAttente(PAS_DE_TEMPS);
 					} else {
-						//TODO Le client se barre
+						// Le client se barre
+						// on le retire de la liste
+						destroyClient(c);
 					}
 				} else if(c.getStatus().equals(ClientStatus.taxiComing)) {
 					if(c.getTpsAttente() >= Client.MAX_TEMPS_ATTENTE) {
-						//TODO le client se barre.
-						// Penser a prevenir le taxi qui se dirrigeai vers lui que c'est plus la peine de venir ...
+						// Le client se barre
+						
+						
+						// on notifie le taxi
+						c.getTaxi().forgetClient(c);
+						
+						// on le retire de la liste
+						destroyClient(c);
 					} else {
-						//TODO : client.tempsAttente += 1;
+						// on incremente le tps d'attente du client en fct du pas
+						c.incrementeTpsAttente(PAS_DE_TEMPS);
 					}
 				}
+			}
+			
+			// on retire les clients qui ont sont partis
+			for(Client c : clientsAVirer) {
+				clients.remove(c);
 			}
 		}
 
 		return (double)nbClientSatisfaits/(double)nbTotalClients;
+	}
+	
+	/**
+	 * Methode permettant d'eliminer un client de la liste
+	 * car arrive a destination
+	 * @param client
+	 * Le client a retirer de la liste
+	 */
+	public void destroyClient(Client client) {
+		clientsAVirer.add(client);
 	}
 
 	/**
