@@ -16,7 +16,17 @@ public class Params {
 	/**
 	 * Nombre d'iterations par default (10 000)
 	 */
-	public static final int ITERRATIONS_DEFAULT = 10000;
+	public static final int ITERRATIONS_DEFAULT = 50;
+
+	/**
+	 * Satisfaction client minimale par default (0.8)
+	 */
+	public static final double SATISFACTION_CLIENT_DEFAULT = 0.8;
+
+	/**
+	 * Lambda Loi de poisson par default (4) pour la frequence moyenne d'apparition des clients sur un pas de temps
+	 */
+	public static final double LAMBDA_POISSON_DEFAULT = 4;
 
 	/**
 	 * Rayon de la ville (en metres)
@@ -30,6 +40,15 @@ public class Params {
 	 * Nombre d'iterations
 	 */
 	private int iterations;
+	/**
+	 * Satisfaction client minimale (en pourcentage)
+	 */
+	private double satisfactionClient;
+
+	/**
+	 * Lambda Loi de poisson pour la frequence moyenne d'apparition des clients sur un pas de temps
+	 */
+	public double lambdaPoisson;
 
 	/**
 	 * Constructeur par default de Params
@@ -38,6 +57,8 @@ public class Params {
 		rayon = Params.RAYON_DEFAULT;
 		vitesse = Params.VITESSE_DEFAULT;
 		iterations = Params.ITERRATIONS_DEFAULT;
+		satisfactionClient = Params.SATISFACTION_CLIENT_DEFAULT;
+		lambdaPoisson = Params.LAMBDA_POISSON_DEFAULT;
 	}
 
 	/**
@@ -87,5 +108,39 @@ public class Params {
 	 */
 	public void setVitesse(double vitesse) {
 		this.vitesse = vitesse;
+	}
+	
+	/**
+	 * Getter pour la satisfaction client minimale
+	 * @return
+	 * La satisfaction client minimale (en pourcent)
+	 */
+	public double getSatisfactionClient() {
+		return satisfactionClient;
+	}
+	/**
+	 * Setter pour la satisfaction client minimum
+	 * @param satisfactionClient
+	 * La satifaction client minimum a respecter
+	 */
+	public void setSatisfactionClient(double satisfactionClient) {
+		this.satisfactionClient = satisfactionClient;
+	}
+	/**
+	 * Getter pour le lambda de la loi de poisson
+	 * @return
+	 * Lambda Poisson
+	 */
+	public double getLambdaPoisson() {
+		return lambdaPoisson;
+	}
+
+	/**
+	 * Setter pour le lambda de la loi de poisson
+	 * @param lambdaPoisson
+	 * Lambda Poisson
+	 */
+	public void setLambdaPoisson(double lambdaPoisson) {
+		this.lambdaPoisson = lambdaPoisson;
 	}
 }

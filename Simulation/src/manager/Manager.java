@@ -9,14 +9,10 @@ public class Manager {
 	public static Model model;
 
 	public static void main(String[] args) {
-
-
 		window = MainWindow.getInstance();
 		window.init();
 		
 		model = Model.getInstance();
 		model.init();
-
-		Poisson.testPoisson();
 	}
 }

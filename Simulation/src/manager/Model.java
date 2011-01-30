@@ -1,5 +1,7 @@
 package manager;
 
+import simulation.Simulation;
+
 /**
  * Modele de donnee du programme
  * @author Sylvain Mauduit <sylvain@mauduit.fr>
@@ -9,6 +11,11 @@ public class Model {
 	 * Parametres du programme
 	 */
 	private Params parametres;
+
+	/**
+	 * Simulation en cours
+	 */
+	private Simulation simulation = null;
 	
 	/**
 	 * Instance du modele
@@ -47,6 +54,24 @@ public class Model {
 	 */
 	public static Params getParams() {
 		return getInstance().parametres;
+	}
+
+	/**
+	 * Getter pour la simulation en cours
+	 * @return
+	 * La simulation en cours ou Null si aucune simulation n'est en cours
+	 */
+	public Simulation getSimulation() {
+		return simulation;
+	}
+
+	/**
+	 * Setter pour la simulation en cours
+	 * @param simulation
+	 * La nouvelle simulation
+	 */
+	public void setSimulation(Simulation simulation) {
+		this.simulation = simulation;
 	}
 
 }

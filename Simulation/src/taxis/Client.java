@@ -1,11 +1,12 @@
 package taxis;
 
-import manager.Manager;
 import manager.Model;
 import simulation.Utils;
 
 public class Client {
 	
+	public static final int MAX_TEMPS_ATTENTE = 2;
+
 	//Position Actuelle
 	private double x;
 	private double y;
@@ -16,6 +17,8 @@ public class Client {
 	
 	//Temps attente entre 0,2 et 1h
 	private double tpsAttente;
+
+	private ClientStatus status;
 	
 	
 	//Cr�e un client avec une position et une destination aleatoire
@@ -33,7 +36,9 @@ public class Client {
 		this.xDest = r * Math.cos(teta);
 		this.yDest = r * Math.sin(teta);
 		
-		this.tpsAttente = 0.8 * Utils.getRandDouble() +  0.2;
+		//this.tpsAttente = 0.8 * Utils.getRandDouble() +  0.2
+
+		status = ClientStatus.waiting;
 		
 	}
 
@@ -52,7 +57,13 @@ public class Client {
 	public double getYDest() {
 		return yDest;
 	}
-	
-	
 
+	public ClientStatus getStatus() {
+		return status;
+	}
+
+	public double getTpsAttente() {
+		return tpsAttente;
+	}
+	
 }
