@@ -20,6 +20,8 @@ public class Client {
 
 	private ClientStatus status;
 	
+	// Le taxi dans lequel se trouve le client
+	private Taxi taxi;
 	
 	//Cr�e un client avec une position et une destination aleatoire
 	public Client(){
@@ -40,6 +42,7 @@ public class Client {
 
 		status = ClientStatus.waiting;
 		
+		taxi = null;
 	}
 
 	public double getX() {
@@ -68,5 +71,35 @@ public class Client {
 	
 	public void setStatus(ClientStatus status) {
 		this.status = status;
+	}
+	
+	/**
+	 * Methode pour incrementer le tps d'attente du client
+	 * en fonction d'un pas
+	 * @param pas
+	 * le pas qui permet de calculer de combien augment le tps
+	 * d'attente du client
+	 */
+	public void incrementeTpsAttente(double pas) {
+		tpsAttente += pas;
+	}
+	
+	/**
+	 * Setter qui permet de notifier au client dans quel taxi il se trouve
+	 * @param taxi
+	 * le taxi dans lequel le client est
+	 */
+	public void setTaxi(Taxi taxi) {
+		this.taxi = taxi;
+	}
+	
+	/**
+	 * Getter pour connaitre le taxi dans lequel se trouve le client
+	 * @return
+	 * le taxi dans lequel se situe le client,
+	 * null s'il n'en a pas
+	 */
+	public Taxi getTaxi() {
+		return taxi;
 	}
 }
