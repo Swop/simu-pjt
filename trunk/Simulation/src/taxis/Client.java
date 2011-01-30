@@ -66,4 +66,7 @@ public class Client {
 		return tpsAttente;
 	}
 	
+	public void setStatus(ClientStatus status) {
+		this.status = status;
+	}
 }
