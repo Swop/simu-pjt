@@ -6,6 +6,7 @@ import manager.Model;
 import taxis.Client;
 import taxis.ClientStatus;
 import taxis.Taxi;
+import taxis.TaxiStatus;
 import view.LogView;
 import view.MainWindow;
 
@@ -138,7 +139,49 @@ public class Simulation extends Thread {
 				
 				if(c.getStatus().equals(ClientStatus.waiting)) {
 					if(c.getTpsAttente() < Client.MAX_TEMPS_ATTENTE) {
-						//TODO : Parcours taxi, selectioner le plus proche qui est pas pris
+						// Parcours taxi, selectioner le plus proche qui est pas pris
+						Taxi plusProche = null;
+						double distPlusProche = 0;
+						for(Taxi t : taxis) {
+							if(!t.isFull())  {
+								if(plusProche == null) {
+									// on verifie que le taxi n'est pas en train de
+									// recuperer un client plus proche
+									double dist = Math.sqrt((c.getX() - t.getX())
+											*(c.getX() - t.getX())
+											+(c.getY() - t.getY())
+											*(c.getY() - t.getY()));
+									if(t.getStatus() != TaxiStatus.wayToClient
+											|| dist < t.getDistanceObjectif()) {
+										// le taxi peut y aller
+										distPlusProche = dist;
+										plusProche = t;
+									}
+								} else {
+									// on calcul la distance
+									double distance = Math.sqrt((c.getX() - t.getX())
+											*(c.getX() - t.getX())
+											+(c.getY() - t.getY())
+											*(c.getY() - t.getY()));
+									if(distance < distPlusProche) {
+										// on verifie que le taxi n'est pas en train de
+										// recuperer un client plus proche
+										if(t.getStatus() != TaxiStatus.wayToClient
+												|| distance < t.getDistanceObjectif()) {
+											// le taxi peut y aller
+											distPlusProche = distance;
+											plusProche = t;
+										}
+									}
+								}
+							}
+						}
+						
+						// on regarde si on a reussi a obtenir un taxi
+						if(plusProche != null) {
+							// dans ce cas on met a jour les status
+							plusProche.changeClientPrority(c);
+						}
 
 						// Attention, si on place le client en mode "taxiComing", et si le taxi en question
 						// est redirriger autre part, il faut penser a remettre le client en "isWaiting"
