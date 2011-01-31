@@ -5,7 +5,7 @@ import simulation.Utils;
 
 public class Client {
 	
-	public static final int MAX_TEMPS_ATTENTE = 2;
+	public static final int MAX_TEMPS_ATTENTE = 40;
 
 	//Position Actuelle
 	private double x;

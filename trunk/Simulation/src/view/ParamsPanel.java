@@ -54,7 +54,7 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		JPanel optionPane;
 		
 		optionPane = new JPanel(new BorderLayout());
-		label = new JLabel("Nb itérations : ");
+		label = new JLabel("Nb iterations : ");
 		this.nbIterrationsSpinner = new JSpinner();
 		nbIterrationsSpinner = new JSpinner();
 		JSpinner.NumberEditor nbIterrationsSpinnerEditor = new JSpinner.NumberEditor(nbIterrationsSpinner);
@@ -66,6 +66,8 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		optionPane.add(nbIterrationsSpinner, BorderLayout.CENTER);
 		optionPane.add(label, BorderLayout.WEST);
 		this.add(optionPane);
+		//ajout listener
+		nbIterrationsSpinner.addChangeListener(this);
 
 		optionPane = new JPanel(new BorderLayout());
 		label = new JLabel("Taille ville (m) : ");
@@ -79,6 +81,8 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		optionPane.add(tailleVilleSpinner, BorderLayout.CENTER);
 		optionPane.add(label, BorderLayout.WEST);
 		this.add(optionPane);
+		//ajout listener
+		tailleVilleSpinner.addChangeListener(this);
 
 		optionPane = new JPanel(new BorderLayout());
 		label = new JLabel("Vitesse taxis (m/min) : ");
@@ -92,6 +96,9 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		optionPane.add(vitesseTaxisSpinner, BorderLayout.CENTER);
 		optionPane.add(label, BorderLayout.WEST);
 		this.add(optionPane);
+		//ajout listener
+		vitesseTaxisSpinner.addChangeListener(this);
+		
 
 		optionPane = new JPanel(new BorderLayout());
 		label = new JLabel("Satisfaction client : ");
@@ -106,6 +113,8 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		optionPane.add(staisfactionClientSpinner, BorderLayout.CENTER);
 		optionPane.add(label, BorderLayout.WEST);
 		this.add(optionPane);
+		//ajout listener
+		staisfactionClientSpinner.addChangeListener(this);
 
 		optionPane = new JPanel(new BorderLayout());
 		label = new JLabel("Lambda Poisson (Moy clients/heure) : ");
@@ -119,6 +128,8 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		optionPane.add(lambdaPoissonSpinner, BorderLayout.CENTER);
 		optionPane.add(label, BorderLayout.WEST);
 		this.add(optionPane);
+		//ajout listener
+		lambdaPoissonSpinner.addChangeListener(this);
 
 	}
 
@@ -137,7 +148,7 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		} else if(e.getSource().equals(tailleVilleSpinner)) {
 			Model.getParams().setRayon((Integer)tailleVilleSpinner.getModel().getValue());
 		} else if(e.getSource().equals(vitesseTaxisSpinner)) {
-			Model.getParams().setVitesse((Double)vitesseTaxisSpinner.getModel().getValue());
+			Model.getParams().setVitesse((Integer)vitesseTaxisSpinner.getModel().getValue());
 		} else if(e.getSource().equals(staisfactionClientSpinner)) {
 			Model.getParams().setSatisfactionClient((Double)staisfactionClientSpinner.getModel().getValue());
 		} else if(e.getSource().equals(lambdaPoissonSpinner)) {
