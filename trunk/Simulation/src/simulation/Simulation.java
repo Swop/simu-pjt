@@ -88,7 +88,8 @@ public class Simulation extends Thread {
 		LogView.log("Satisfaction client minimale : "+Model.getParams().getSatisfactionClient());
 		LogView.log("Vitesse des taxis : "+Model.getParams().getVitesse()+" metres/min");
 		LogView.log("Rayon de la ville : "+Model.getParams().getRayon()+" metres");
-		LogView.log("Nombre moyen de nouveau client par heure : "+Model.getParams().getLambdaPoisson());
+		LogView.log("Temps moyen entre chaque apparition de client : "+Model.getParams().getLambdaPoisson());
+		LogView.log("Temps d'attente maximum pour chaque client : "+Model.getParams().getAttenteMaxClient());
 
 		LogView.log("");
 
@@ -199,7 +200,7 @@ public class Simulation extends Thread {
 			for(Client c : clients) {
 				
 				if(c.getStatus().equals(ClientStatus.waiting)) {
-					if(c.getTpsAttente() < Client.MAX_TEMPS_ATTENTE) {
+					if(c.getTpsAttente() < Model.getParams().getAttenteMaxClient()) {
 						// Parcours taxi, selectioner le plus proche qui est pas pris
 						Taxi plusProche = null;
 						double distPlusProche = 0;
@@ -252,7 +253,7 @@ public class Simulation extends Thread {
 						destroyClient(c);
 					}
 				} else if(c.getStatus().equals(ClientStatus.taxiComing)) {
-					if(c.getTpsAttente() >= Client.MAX_TEMPS_ATTENTE) {
+					if(c.getTpsAttente() >= Model.getParams().getAttenteMaxClient()) {
 						// Le client se barre
 						
 						

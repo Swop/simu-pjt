@@ -29,6 +29,11 @@ public class Params {
 	public static final double LAMBDA_POISSON_DEFAULT = 4;
 
 	/**
+	 * Attente maximium des clients par default (30)
+	 */
+	public static final int TEMPS_ATTENTE_MAX_CLIENT_DEFAULT = 30;
+
+	/**
 	 * Rayon de la ville (en metres)
 	 */
 	private int rayon;
@@ -51,6 +56,11 @@ public class Params {
 	public double lambdaPoisson;
 
 	/**
+	 * Attente maximium des clients
+	 */
+	public int attenteMaxClient;
+
+	/**
 	 * Constructeur par default de Params
 	 */
 	public Params() {
@@ -59,6 +69,7 @@ public class Params {
 		iterations = Params.ITERRATIONS_DEFAULT;
 		satisfactionClient = Params.SATISFACTION_CLIENT_DEFAULT;
 		lambdaPoisson = Params.LAMBDA_POISSON_DEFAULT;
+		attenteMaxClient = Params.TEMPS_ATTENTE_MAX_CLIENT_DEFAULT;
 	}
 
 	/**
@@ -142,5 +153,23 @@ public class Params {
 	 */
 	public void setLambdaPoisson(double lambdaPoisson) {
 		this.lambdaPoisson = lambdaPoisson;
+	}
+
+	/**
+	 * Getter pour le temps d'attente maximal des clients
+	 * @return
+	 * Le temps d'attente maximal des clients
+	 */
+	public int getAttenteMaxClient() {
+		return attenteMaxClient;
+	}
+
+	/**
+	 * Setter pour le temps d'attente maximal des clients
+	 * @param attenteMaxClient
+	 * Le temps d'attente maximal des clients
+	 */
+	public void setAttenteMaxClient(int attenteMaxClient) {
+		this.attenteMaxClient = attenteMaxClient;
 	}
 }

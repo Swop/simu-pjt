@@ -64,13 +64,13 @@ public class MainWindow extends JFrame implements ActionListener {
 
 		paramsPanel = new ParamsPanel();
 		paramsPanel.init();
-		northPane.add(paramsPanel, BorderLayout.NORTH);
+		northPane.add(paramsPanel, BorderLayout.PAGE_START);
 
 		runBtn = new JButton("LANCER LA SIMULATION");
 		runBtn.addActionListener(this);
 		northPane.add(runBtn, BorderLayout.CENTER);
 
-		mainPane.add(northPane, BorderLayout.NORTH);
+		mainPane.add(northPane, BorderLayout.PAGE_START);
 
 		logView = LogView.getInstance();
 		JScrollPane scroll = new JScrollPane(logView);

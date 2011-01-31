@@ -2,6 +2,8 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -39,6 +41,11 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 	private JSpinner lambdaPoissonSpinner;
 
 	/**
+	 * Spinner pour le temps attente max d'un client
+	 */
+	private JSpinner attenteMaxClientSpinner;
+
+	/**
 	 * Constructeur du panneau de parametres
 	 */
 	public ParamsPanel() {
@@ -49,7 +56,7 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 	 * Initialise le panneau de parametres
 	 */
 	public void init() {
-		this.setLayout(new FlowLayout());
+		this.setLayout(new GridLayout(3, 2));
 		
 		JLabel label;
 		JPanel optionPane;
@@ -120,6 +127,19 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		//ajout listener
 		lambdaPoissonSpinner.addChangeListener(this);
 
+		optionPane = new JPanel(new BorderLayout());
+		label = new JLabel("Temps attente Max clients : ");
+		attenteMaxClientSpinner = new JSpinner();
+		JSpinner.NumberEditor attenteMaxClientSpinnerEditor = new JSpinner.NumberEditor(attenteMaxClientSpinner);
+		attenteMaxClientSpinner.setEditor(attenteMaxClientSpinnerEditor);
+		attenteMaxClientSpinner.addChangeListener(this);
+		attenteMaxClientSpinnerEditor.getModel().setValue(Params.TEMPS_ATTENTE_MAX_CLIENT_DEFAULT);
+		attenteMaxClientSpinnerEditor.getModel().setMinimum(1);
+		attenteMaxClientSpinnerEditor.getFormat().applyPattern("###,##0");
+		optionPane.add(attenteMaxClientSpinner, BorderLayout.CENTER);
+		optionPane.add(label, BorderLayout.WEST);
+		this.add(optionPane);
+
 	}
 
 	@Override
@@ -142,6 +162,8 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 			Model.getParams().setSatisfactionClient((Double)staisfactionClientSpinner.getModel().getValue());
 		} else if(e.getSource().equals(lambdaPoissonSpinner)) {
 			Model.getParams().setLambdaPoisson((Double)lambdaPoissonSpinner.getModel().getValue());
+		} else if(e.getSource().equals(attenteMaxClientSpinner)) {
+			Model.getParams().setAttenteMaxClient((Integer)attenteMaxClientSpinner.getModel().getValue());
 		}
 	}
 }
