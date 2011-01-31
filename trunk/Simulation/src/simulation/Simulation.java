@@ -3,6 +3,13 @@ package simulation;
 import java.util.ArrayList;
 import java.util.List;
 import manager.Model;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import taxis.Client;
 import taxis.ClientStatus;
 import taxis.Taxi;
@@ -34,6 +41,11 @@ public class Simulation extends Thread {
 	 * Satisfaction client atteinte pendant la simulation
 	 */
 	private double moyenneSatisfaction;
+
+	/**
+	 * Jeu de donnees pour affichage du graphe
+	 */
+	private XYSeries seriePoints;
 
 	/**
 	 * Represente l'etat de la simulation
@@ -69,6 +81,8 @@ public class Simulation extends Thread {
 		nombreTaxisNecessaires = 0;
 		moyenneSatisfaction = 0;
 
+		this.seriePoints = new XYSeries("Simulation");
+
 		LogView.log("---- LANCEMENT DE LA SIMULATION ----");
 		LogView.log("Iterations : "+Model.getParams().getIterations());
 		LogView.log("Satisfaction client minimale : "+Model.getParams().getSatisfactionClient());
@@ -81,7 +95,6 @@ public class Simulation extends Thread {
 		while(moyenneSatisfaction < Model.getParams().getSatisfactionClient() && running) {
 
 			nombreTaxisNecessaires++;
-			LogView.log("TAXIS : "+nombreTaxisNecessaires);
 
 			List<Double> satisfactionsJournees = new ArrayList<Double>();
 
@@ -91,15 +104,26 @@ public class Simulation extends Thread {
 			if(!running)
 				break;
 			moyenneSatisfaction = Utils.moyenne(satisfactionsJournees);
+
+			LogView.log("Taxis : "+nombreTaxisNecessaires+" - Satisfaction moyenne : "+moyenneSatisfaction);
+			seriePoints.add(nombreTaxisNecessaires, moyenneSatisfaction);
 		}
 		if(!running) {
 			nombreTaxisNecessaires--;
-			LogView.log("-- Simulation stoppée par l'utilisateur --");
+			LogView.log("-- Simulation stoppee par l'utilisateur --");
 		}
 		
 		LogView.log("---- RESULTATS ----");
 		LogView.log("Satisfaction client : "+moyenneSatisfaction);
-		LogView.log("Taxi nécessaires : "+nombreTaxisNecessaires);
+		LogView.log("Taxis necessaires : "+nombreTaxisNecessaires);
+
+		XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(seriePoints);
+		JFreeChart chartLine = ChartFactory.createXYLineChart("Resultats", "Nombre de taxis", "Satisfaction des clients", dataset, PlotOrientation.VERTICAL, false, false, false);
+
+		ChartFrame frame = new ChartFrame("Resultats", chartLine);
+		frame.pack();
+		frame.setVisible(true);
 
 		running = false;
 		MainWindow.getInstance().activerCommandes(true);
@@ -295,5 +319,13 @@ public class Simulation extends Thread {
 	 */
 	public void stopThread() {
 		running = false;
+	}
+	
+	/**
+	 * Getter pour le jeu de donnee
+	 * @return
+	 */
+	public XYSeries getSeriePoints() {
+		return seriePoints;
 	}
 }

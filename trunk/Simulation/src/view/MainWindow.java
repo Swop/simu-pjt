@@ -83,7 +83,7 @@ public class MainWindow extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		this.setSize(new Dimension(1024, 700));
-		this.setTitle("Modélisation & Simulation : Gestion de taxis");
+		this.setTitle("Modelisation & Simulation : Gestion de taxis");
 		this.setLocationRelativeTo(null);
 
 		this.pack();
