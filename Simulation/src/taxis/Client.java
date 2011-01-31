@@ -4,8 +4,6 @@ import manager.Model;
 import simulation.Utils;
 
 public class Client {
-	
-	public static final int MAX_TEMPS_ATTENTE = 20;
 
 	//Position Actuelle
 	private double x;
