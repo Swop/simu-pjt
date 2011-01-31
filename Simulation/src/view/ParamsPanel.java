@@ -109,7 +109,7 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		staisfactionClientSpinner.addChangeListener(this);
 
 		optionPane = new JPanel(new BorderLayout());
-		label = new JLabel("Lambda Poisson (Moy clients/heure) : ");
+		label = new JLabel("Lambda exponentiel (tps att entre 2 clients): ");
 		lambdaPoissonSpinner = new JSpinner();
 		lambdaPoissonSpinner.setModel(new SpinnerNumberModel(Params.LAMBDA_POISSON_DEFAULT, 0.01, 99.99, 0.01));
 		JSpinner.NumberEditor editorLambda = (JSpinner.NumberEditor)lambdaPoissonSpinner.getEditor();
