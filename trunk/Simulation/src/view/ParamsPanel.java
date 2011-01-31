@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import manager.Model;
@@ -55,7 +56,6 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		
 		optionPane = new JPanel(new BorderLayout());
 		label = new JLabel("Nb iterations : ");
-		this.nbIterrationsSpinner = new JSpinner();
 		nbIterrationsSpinner = new JSpinner();
 		JSpinner.NumberEditor nbIterrationsSpinnerEditor = new JSpinner.NumberEditor(nbIterrationsSpinner);
 		nbIterrationsSpinner.setEditor(nbIterrationsSpinnerEditor);
@@ -66,12 +66,9 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 		optionPane.add(nbIterrationsSpinner, BorderLayout.CENTER);
 		optionPane.add(label, BorderLayout.WEST);
 		this.add(optionPane);
-		//ajout listener
-		nbIterrationsSpinner.addChangeListener(this);
 
 		optionPane = new JPanel(new BorderLayout());
 		label = new JLabel("Taille ville (m) : ");
-		this.tailleVilleSpinner = new JSpinner();
 		tailleVilleSpinner = new JSpinner();
 		JSpinner.NumberEditor tailleVilleSpinnerEditor = new JSpinner.NumberEditor(tailleVilleSpinner);
 		tailleVilleSpinner.setEditor(tailleVilleSpinnerEditor);
@@ -86,13 +83,12 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 
 		optionPane = new JPanel(new BorderLayout());
 		label = new JLabel("Vitesse taxis (m/min) : ");
-		this.vitesseTaxisSpinner = new JSpinner();
 		vitesseTaxisSpinner = new JSpinner();
 		JSpinner.NumberEditor vitesseTaxisSpinnerEditor = new JSpinner.NumberEditor(vitesseTaxisSpinner);
 		vitesseTaxisSpinner.setEditor(vitesseTaxisSpinnerEditor);
 		vitesseTaxisSpinnerEditor.getModel().setValue(Params.VITESSE_DEFAULT);
 		vitesseTaxisSpinnerEditor.getModel().setMinimum(1);
-		vitesseTaxisSpinnerEditor.getFormat().applyPattern("###,##0.0#");
+		vitesseTaxisSpinnerEditor.getFormat().applyPattern("###,##0");
 		optionPane.add(vitesseTaxisSpinner, BorderLayout.CENTER);
 		optionPane.add(label, BorderLayout.WEST);
 		this.add(optionPane);
@@ -102,14 +98,10 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 
 		optionPane = new JPanel(new BorderLayout());
 		label = new JLabel("Satisfaction client : ");
-		this.staisfactionClientSpinner = new JSpinner();
 		staisfactionClientSpinner = new JSpinner();
-		JSpinner.NumberEditor staisfactionClientSpinnerEditor = new JSpinner.NumberEditor(staisfactionClientSpinner);
-		staisfactionClientSpinner.setEditor(staisfactionClientSpinnerEditor);
-		staisfactionClientSpinnerEditor.getModel().setValue(Params.SATISFACTION_CLIENT_DEFAULT);
-		staisfactionClientSpinnerEditor.getModel().setMinimum(0.01);
-		staisfactionClientSpinnerEditor.getModel().setMaximum(1);
-		staisfactionClientSpinnerEditor.getFormat().applyPattern("0.0#");
+		staisfactionClientSpinner.setModel(new SpinnerNumberModel(Params.SATISFACTION_CLIENT_DEFAULT, 0.01, 1, 0.01));
+		JSpinner.NumberEditor editorSatisfaction = (JSpinner.NumberEditor)staisfactionClientSpinner.getEditor();
+		editorSatisfaction.getFormat().applyPattern("#0.##");
 		optionPane.add(staisfactionClientSpinner, BorderLayout.CENTER);
 		optionPane.add(label, BorderLayout.WEST);
 		this.add(optionPane);
@@ -118,13 +110,10 @@ public class ParamsPanel extends JPanel implements ChangeListener {
 
 		optionPane = new JPanel(new BorderLayout());
 		label = new JLabel("Lambda Poisson (Moy clients/heure) : ");
-		this.lambdaPoissonSpinner = new JSpinner();
 		lambdaPoissonSpinner = new JSpinner();
-		JSpinner.NumberEditor lambdaPoissonSpinnerEditor = new JSpinner.NumberEditor(lambdaPoissonSpinner);
-		lambdaPoissonSpinner.setEditor(lambdaPoissonSpinnerEditor);
-		lambdaPoissonSpinnerEditor.getModel().setValue(Params.LAMBDA_POISSON_DEFAULT);
-		lambdaPoissonSpinnerEditor.getModel().setMinimum(0.01);
-		lambdaPoissonSpinnerEditor.getFormat().applyPattern("0.0#");
+		lambdaPoissonSpinner.setModel(new SpinnerNumberModel(Params.LAMBDA_POISSON_DEFAULT, 0.01, 99.99, 0.01));
+		JSpinner.NumberEditor editorLambda = (JSpinner.NumberEditor)lambdaPoissonSpinner.getEditor();
+		editorLambda.getFormat().applyPattern("##0.##");
 		optionPane.add(lambdaPoissonSpinner, BorderLayout.CENTER);
 		optionPane.add(label, BorderLayout.WEST);
 		this.add(optionPane);
