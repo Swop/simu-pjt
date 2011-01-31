@@ -64,13 +64,16 @@ public class Taxi {
 				// calcul de l'angle separant le taxi du client (radian)
 				double angle = Math.atan2((mainClient.getY() - y), mainClient.getX() - x);
 				// on calcule alors le x parcouru et le y parcouru
-				double vitesseTot = Simulation.NB_PAS/**60*/*Model.getParams().getVitesse();
+				double vitesseTot = Simulation.PAS_DE_TEMPS*Model.getParams().getVitesse();
+				//System.out.println("vitesse :"+vitesseTot);
 				double newX = vitesseTot * Math.cos(angle);
 				double newY = vitesseTot * Math.sin(angle);
 				
 				// on regarde si on a atteint le client
 				if((x < mainClient.getX() && x+newX >= mainClient.getX())
-					|| (x > mainClient.getX() && x+newX <= mainClient.getX())) {
+					|| (x > mainClient.getX() && x+newX <= mainClient.getX())
+					|| (y < mainClient.getY() && y+newY >= mainClient.getY())
+					|| (y > mainClient.getY() && y+newY <= mainClient.getY())) {
 					// client atteint on met a jour
 					x = mainClient.getX(); // TODO : en vrai le taxi a pu bouger
 					y = mainClient.getY();
@@ -91,13 +94,15 @@ public class Taxi {
 				// calcul de l'angle separant le taxi de sa destination (radian)
 				double angle = Math.atan2((mainClient.getYDest() - y), mainClient.getXDest() - x);
 				// on calcule alors le x parcouru et le y parcouru
-				double vitesseTot = Simulation.NB_PAS/**60*/*Model.getParams().getVitesse();
+				double vitesseTot = Simulation.PAS_DE_TEMPS*Model.getParams().getVitesse();
 				double newX = vitesseTot * Math.cos(angle);
 				double newY = vitesseTot * Math.sin(angle);
 				
 				// on regarde si on a atteint la destination client
 				if((x < mainClient.getXDest() && x+newX >= mainClient.getXDest())
-					|| (x > mainClient.getXDest() && x+newX <= mainClient.getXDest())) {
+					|| (x > mainClient.getXDest() && x+newX <= mainClient.getXDest())
+					|| (y < mainClient.getYDest() && y+newY >= mainClient.getYDest())
+					|| (y > mainClient.getYDest() && y+newY <= mainClient.getYDest())) {
 					// destination du client atteinte on met a jour
 					x = mainClient.getXDest();  // TODO : en vrai le taxi a pu bouger
 					y = mainClient.getYDest();

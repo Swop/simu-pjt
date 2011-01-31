@@ -10,9 +10,9 @@ public class Params {
 	 */
 	public static final int RAYON_DEFAULT = 10000;
 	/**
-	 * Vitesse des taxis par default (833.33 metres/minutes)
+	 * Vitesse des taxis par default (833 metres/minutes)
 	 */
-	public static final double VITESSE_DEFAULT = 833.33;
+	public static final double VITESSE_DEFAULT = 833;
 	/**
 	 * Nombre d'iterations par default (10 000)
 	 */

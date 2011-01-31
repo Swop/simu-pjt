@@ -21,9 +21,9 @@ public class Simulation extends Thread {
 	public static final int PAS_DE_TEMPS = 1;
 
 	/**
-	 * Nombre de pas de temps dans la journee
+	 * Nombre de pas de temps dans la journee, correspond a 1440 minute
 	 */
-	public static final int NB_PAS = 24;
+	public static final int NB_PAS = 1440;
 
 	/**
 	 * Nombre de taxi necessaire pour atteindre la satisfaction client
@@ -122,7 +122,10 @@ public class Simulation extends Thread {
 		for(int i = 0; i < nbTaxis; ++i) {
 			taxis.add(new Taxi());
 		}
-
+		
+		int attenteAvantAparition = 0;
+		
+		
 		for(int i = 0; i<Simulation.NB_PAS*Simulation.PAS_DE_TEMPS; i+=Simulation.PAS_DE_TEMPS) {
 			
 			/**
@@ -143,8 +146,16 @@ public class Simulation extends Thread {
 	 */
 			
 			clientsAVirer.clear(); // reinit les clients a virer
-
-			int nbNouveauxClients = Poisson.nombreNouveauxClients(Model.getParams().getLambdaPoisson());
+			int nbNouveauxClients =0;
+			if (attenteAvantAparition == 0){
+				
+				attenteAvantAparition = Exponentielle.getTpsApparitionClient(Model.getParams().getLambdaPoisson());
+				//System.out.println(attenteAvantAparition);
+				nbNouveauxClients = 1;
+			}
+			else attenteAvantAparition--;
+			
+			/*int nbNouveauxClients = Poisson.nombreNouveauxClients(Model.getParams().getLambdaPoisson());*/
 			nbTotalClients += nbNouveauxClients;
 
 			for(int j=0; j<nbNouveauxClients; j++)
